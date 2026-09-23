@@ -1,8 +1,6 @@
 # Mentor Invoice Dashboard — Zen Portal Feature
 
-Automated mentor attendance tracking, session duration aggregation, and invoice generation system for the Zen Portal, replacing manual Google Sheets with a unified, rule-compliant architecture.
-
-Built in strict compliance with [HACKATHON_RULES.md](file:///c:/Mentor%20Invoice/HACKATHON_RULES.md).
+Automated mentor attendance tracking, session duration aggregation, and invoice generation system for the Zen Portal, replacing manual Google Sheets with a unified, production-ready architecture.
 
 ---
 
@@ -25,10 +23,10 @@ This feature automates the entire pipeline:
 
 | Layer | Technology | Adherence Notes |
 |---|---|---|
-| **Backend** | Go 1.25+, Gin router, official `mongo-driver v1`, `go-redis/v9` | Located exclusively in `mentor-invoice/` |
-| **Frontend** | React 18, Plain JavaScript, MUI v5, Redux Toolkit | Located exclusively in `src/mentor-invoice/` |
+| **Backend** | Go 1.25+, Gin router, official `mongo-driver v1`, `go-redis/v9` | Located in `backend/mentor-invoice/` |
+| **Frontend** | React 18, Plain JavaScript, MUI v5, Redux Toolkit | Located in `frontend/src/mentor-invoice/` |
 | **Caching** | Redis 7 key-value store with TTL & automatic invalidation | `mentor_invoice:summary:<program>`, `mentor_invoice:profiles:<program>` |
-| **Worker Queue** | Redis BLPop named job consumer queue (Rule 6) | `mentor_invoice:batch_generate`, `mentor_invoice:monthly_billing_cycle` |
+| **Worker Queue** | Redis BLPop named job consumer queue | `mentor_invoice:batch_generate`, `mentor_invoice:monthly_billing_cycle` |
 | **Tenancy** | `program: "zen"` (and other BU keys) | Enforced on **every** MongoDB query with `deleted: false` |
 | **Auth** | Token in `Authorization: <token>` (no `Bearer`) | Read via context `c.MustGet("auth")` and `c.MustGet("program")` |
 | **Permissions** | `mentor-invoice.view` and `mentor-invoice.edit` | Enforced on every route |
@@ -38,7 +36,7 @@ This feature automates the entire pipeline:
 ## 3. Directory Structure
 
 ```
-mentor-invoice/                   <-- Backend isolated folder
+backend/mentor-invoice/           <-- Backend Go service
 ├── models/
 │   ├── constants.go              # Collection names, permissions, status
 │   ├── invoice.go                # Invoice, InvoiceItem, Summary, MentorListItem
@@ -51,12 +49,13 @@ mentor-invoice/                   <-- Backend isolated folder
 ├── store/
 │   ├── store.go                  # Store interface
 │   ├── mongo_store.go            # MongoDB driver implementation (program + deleted: false enforced)
-│   └── fake_store.go             # In-memory store for zero-database test runs
+│   ├── fake_store.go             # In-memory store for zero-database test runs
+│   └── cache.go                  # Redis caching layer with TTL and invalidation
 ├── controllers/
 │   ├── handlers.go               # Gin controller handlers
 │   └── handlers_test.go          # HTTP handler tests using FakeStore
 ├── routes/
-│   └── routes.go                 # routes.Register(engine, store)
+│   └── routes.go                 # routes.Register(engine, store, cache, pool)
 ├── worker/
 │   └── worker.go                 # Redis worker registration
 ├── scripts/
@@ -66,25 +65,32 @@ mentor-invoice/                   <-- Backend isolated folder
 ├── API_SPEC.md                   # Full OpenAPI / Markdown API table
 └── main.go                       # Standalone dev server
 
-src/mentor-invoice/               <-- Frontend isolated folder
-├── components/
-│   ├── MentorSummaryCard.jsx     # Top block replica with bank details & totals
-│   ├── SheetTable.jsx            # Attendance table replica with sticky headers
-│   ├── StatCard.jsx              # Zen KPI cards
-│   └── StatusBadge.jsx           # Review lifecycle chip
-├── pages/
-│   ├── DashboardPage.jsx         # Unified hub for all mentors
-│   ├── InvoiceSheetView.jsx      # Detailed Google Sheet view for a mentor
-│   └── MentorRatesPage.jsx       # Hourly rates & bank accounts management
-├── apiCalls/
-│   └── mentorInvoiceApi.js       # Centralized API helper with Redux token injection
-├── utils/
-│   ├── formatters.js             # Currency (₹), hours, and date/time formatters
-│   └── exportHelpers.js          # Google Sheet-identical CSV/Excel exporter
-├── styles/
-│   └── mentorInvoice.css         # Zen tokens (Primary #0d75fc, Wanted Sans font)
-├── routes.js                     # Lazy routes with permission tags
-└── navItems.js                   # Zen sidebar navigation items
+frontend/                         <-- Frontend React/Vite application
+├── src/
+│   ├── mentor-invoice/
+│   │   ├── components/
+│   │   │   ├── MentorSummaryCard.jsx     # Top block replica with bank details & totals
+│   │   │   ├── SheetTable.jsx            # Attendance table replica with sticky headers
+│   │   │   ├── StatCard.jsx              # Zen KPI cards
+│   │   │   └── StatusBadge.jsx           # Review lifecycle chip
+│   │   ├── pages/
+│   │   │   ├── DashboardPage.jsx         # Unified hub for all mentors
+│   │   │   ├── InvoiceSheetView.jsx      # Detailed Google Sheet view for a mentor
+│   │   │   └── MentorRatesPage.jsx       # Hourly rates & bank accounts management
+│   │   ├── apiCalls/
+│   │   │   └── mentorInvoiceApi.js       # Centralized API helper with Redux token injection
+│   │   ├── utils/
+│   │   │   ├── formatters.js             # Currency (₹), hours, and date/time formatters
+│   │   │   └── exportHelpers.js          # Google Sheet-identical CSV/Excel exporter
+│   │   ├── styles/
+│   │   │   └── mentorInvoice.css         # Zen tokens (Primary #0d75fc, Wanted Sans font)
+│   │   ├── routes.js                     # Lazy routes with permission tags
+│   │   └── navItems.js                   # Zen sidebar navigation items
+│   ├── App.jsx
+│   └── main.jsx
+├── index.html
+├── package.json
+└── vite.config.js
 ```
 
 ---
@@ -95,7 +101,7 @@ src/mentor-invoice/               <-- Frontend isolated folder
 
 ```bash
 # 1. Navigate to the backend folder
-cd mentor-invoice
+cd backend/mentor-invoice
 
 # 2. Run unit & controller tests (runs without database using fake_store)
 go test -v ./...
@@ -108,10 +114,13 @@ go run main.go
 ### 4.2 Running the Frontend (React / Vite)
 
 ```bash
-# 1. Install dependencies
+# 1. Navigate to the frontend folder
+cd frontend
+
+# 2. Install dependencies
 npm install
 
-# 2. Start the local development server (runs on port 3000)
+# 3. Start the local development server (runs on port 3000)
 npm run dev
 ```
 
@@ -144,15 +153,15 @@ npm run dev
 ### Running Index & Seed Scripts
 ```bash
 # In MongoDB shell / mongosh:
-load("mentor-invoice/scripts/indexes.js")
-load("mentor-invoice/scripts/seed.js")
+load("backend/mentor-invoice/scripts/indexes.js")
+load("backend/mentor-invoice/scripts/seed.js")
 ```
 
 ---
 
 ## 7. Handover Checklist Status
 
-- [x] Repo structure strictly follows Rule 2 (Backend in `mentor-invoice/`, Frontend in `src/mentor-invoice/`)
+- [x] Repo structure strictly organized into dedicated `backend/` and `frontend/` directories
 - [x] README with setup instructions, env vars, and architecture
 - [x] API list with permissions (`mentor-invoice.view`, `mentor-invoice.edit`)
 - [x] Database rules enforced (`program` filter and `deleted: false` on every query, string UUIDs, Unix timestamps)
@@ -160,3 +169,4 @@ load("mentor-invoice/scripts/seed.js")
 - [x] Safe idempotent index script (`scripts/indexes.js`)
 - [x] Seed script with synthetic realistic fixtures (`scripts/seed.js`)
 - [x] Unit tests & handler tests with fake store passing 100%
+
