@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Wanted+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --zen-primary: #0d75fc;
+  --zen-primary-hover: #095ec9;
+  --zen-primary-light: #e8f2fe;
+  --zen-text-main: #1F252D;
+  --zen-text-secondary: #495565;
+  --zen-text-muted: #5E7087;
+  --zen-border: #E2E8F0;
+  --zen-bg-page: #F8FAFC;
+  --zen-bg-card: #FFFFFF;
+  --zen-success: #10B981;
+  --zen-warning: #F59E0B;
+  --zen-danger: #EF4444;
+}
+
+body {
+  font-family: 'Wanted Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--zen-text-main);
+  background-color: var(--zen-bg-page);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Zen Container */
+.zen-dashboard-container {
+  padding: 32px 40px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* Google Sheet Replica Table Styles */
+.sheet-container {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.sheet-header-banner {
+  background: linear-gradient(135deg, #0d75fc 0%, #1e40af 100%);
+  color: #ffffff;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.sheet-table th {
+  background: #f1f5f9;
+  color: #334155;
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.sheet-table td {
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  color: #1F252D;
+  vertical-align: middle;
+}
+
+.sheet-table tr:nth-of-type(even) {
+  background-color: #f8fafc;
+}
+
+.sheet-table tr:hover {
+  background-color: #f0f7ff;
+}
+
+.sheet-cell-hours {
+  font-weight: 700;
+  color: #0d75fc;
+  font-family: monospace;
+  font-size: 14px;
+  text-align: right;
+}
+
+.sheet-cell-status-done {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background-color: #d1fae5;
+  color: #065f46;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sheet-cell-comment {
+  font-size: 11px;
+  color: #495565;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Card components */
+.zen-stat-card {
+  background: #ffffff;
+  border: 1px solid var(--zen-border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.zen-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px -2px rgba(13, 117, 252, 0.08);
+}
