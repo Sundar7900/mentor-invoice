@@ -40,13 +40,15 @@ func TestCombinedClassAggregation(t *testing.T) {
 		},
 	}
 
-	// 2 records for the same time slot across 2 batches (combined class)
+	// 2 records for the same time slot across 2 batches (combined class) with SessionType: "wpn"
 	records := []models.HostAttendance{
 		{
 			ID:               "att-1",
 			Host:             mentorHash,
 			BatchID:          "batch-1",
 			SessionID:        "sess-1",
+			SessionName:      "Week 1 / Pseudo Mainboot Day 1: How Modern Applications Work",
+			SessionType:      "wpn",
 			SessionStartTime: 1782390600,
 			SessionEndTime:   1782397800,
 			AttendanceInfo: []models.HostAttendanceInfo{
@@ -60,10 +62,28 @@ func TestCombinedClassAggregation(t *testing.T) {
 			Host:             mentorHash,
 			BatchID:          "batch-2",
 			SessionID:        "sess-1",
+			SessionName:      "Week 1 / Pseudo Mainboot Day 1: How Modern Applications Work",
+			SessionType:      "wpn",
 			SessionStartTime: 1782390600,
 			SessionEndTime:   1782397800,
 			AttendanceInfo: []models.HostAttendanceInfo{
 				{JoinedAt: 1782390600, LeftAt: 1782397800, PeerDuration: 7200},
+			},
+			IsPresent: true,
+			Status:    "attended",
+		},
+		// 1 record with BLANK SessionType: "" that MUST be ignored
+		{
+			ID:               "att-blank",
+			Host:             mentorHash,
+			BatchID:          "batch-1",
+			SessionID:        "sess-blank",
+			SessionName:      "Uncategorized Session",
+			SessionType:      "", // Blank session type
+			SessionStartTime: 1782400000,
+			SessionEndTime:   1782407200,
+			AttendanceInfo: []models.HostAttendanceInfo{
+				{JoinedAt: 1782400000, LeftAt: 1782407200, PeerDuration: 7200},
 			},
 			IsPresent: true,
 			Status:    "attended",

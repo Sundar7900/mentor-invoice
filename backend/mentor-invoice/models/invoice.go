@@ -3,11 +3,13 @@ package models
 // InvoiceItem represents a single row in the Mentor Attendance Tracker and Payment Invoice Sheet
 type InvoiceItem struct {
 	SessionID            string  `json:"sessionId" bson:"sessionId"`
-	Date                 string  `json:"date" bson:"date"` // e.g. "8/16/2026"
+	SessionName          string  `json:"sessionName,omitempty" bson:"sessionName,omitempty"` // What session mentor has taken
+	SessionType          string  `json:"sessionType,omitempty" bson:"sessionType,omitempty"` // "wpn" / "Pseudo Mainboot"
+	Date                 string  `json:"date" bson:"date"`                                   // e.g. "8/16/2026"
 	SessionTimestamp     int64   `json:"sessionTimestamp" bson:"sessionTimestamp"`
 	CourseName           string  `json:"courseName" bson:"courseName"`
 	BatchCode            string  `json:"batchCode" bson:"batchCode"`
-	Interview            string  `json:"interview" bson:"interview"`   // Session Type or Interview tag
+	Interview            string  `json:"interview" bson:"interview"`   // Session Type or Interview tag (for sheet replica)
 	Hours                float64 `json:"hours" bson:"hours"`           // Rounded e.g. 2.3
 	HostStatus           string  `json:"hostStatus" bson:"hostStatus"` // "Done"
 	Comments             string  `json:"comments" bson:"comments"`     // Combined batches e.g. "DSGA-S-WE-T-B22, DSGA-S-WE-T-B21"
@@ -67,4 +69,5 @@ type MentorListItem struct {
 	TotalAmount     float64     `json:"totalAmount"`
 	LatestStatus    string      `json:"latestStatus"`
 	InvoiceID       string      `json:"invoiceId,omitempty"`
+	SessionsTaken   []string    `json:"sessionsTaken,omitempty"` // Names of sessions taken by mentor
 }

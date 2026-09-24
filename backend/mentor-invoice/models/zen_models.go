@@ -14,7 +14,11 @@ type HostAttendance struct {
 	HostEmail            string               `json:"hostEmail" bson:"hostEmail"`
 	HostName             string               `json:"hostName" bson:"hostName"`
 	BatchID              string               `json:"batchId" bson:"batchId"`
+	BatchName            string               `json:"batchName,omitempty" bson:"batchName,omitempty"`
 	SessionID            string               `json:"sessionId" bson:"sessionId"`
+	SessionName          string               `json:"sessionName,omitempty" bson:"sessionName,omitempty"`
+	CourseKey            string               `json:"courseKey,omitempty" bson:"courseKey,omitempty"`
+	SessionType          string               `json:"sessionType,omitempty" bson:"sessionType,omitempty"`
 	MeetingID            string               `json:"meetingId" bson:"meetingId"`
 	Role                 string               `json:"role" bson:"role"`
 	Status               string               `json:"status" bson:"status"`

@@ -27,7 +27,12 @@ yarn-error.log*
 
 # Environment
 .env
-.env.*.local
+.env.*
+.env*.local
+*.env
+!.env.example
+!*.env.example
+!**/.env.example
 
 # OS files
 .DS_Store

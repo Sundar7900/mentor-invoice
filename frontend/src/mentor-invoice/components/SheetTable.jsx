@@ -48,7 +48,10 @@ export default function SheetTable({ items = [], totalHours = 0, totalSessions =
               Batch Code
             </TableCell>
             <TableCell sx={{ fontWeight: 700, backgroundColor: '#f1f5f9', color: '#1e293b' }}>
-              Interview / Type
+              Session / Topic Taken
+            </TableCell>
+            <TableCell sx={{ fontWeight: 700, backgroundColor: '#f1f5f9', color: '#1e293b' }}>
+              Session Type
             </TableCell>
             <TableCell align="right" sx={{ fontWeight: 700, backgroundColor: '#f1f5f9', color: '#0d75fc' }}>
               Hours
@@ -101,8 +104,23 @@ export default function SheetTable({ items = [], totalHours = 0, totalSessions =
                     {row.batchCode}
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ color: 'var(--zen-text-secondary)' }}>
-                  {row.interview || 'Live Class'}
+                <TableCell sx={{ minWidth: 200 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 700, color: '#1e293b', fontSize: '0.85rem' }}>
+                    {row.sessionName || 'Pseudo Mainboot'}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    size="small"
+                    label={row.sessionType || 'Pseudo Mainboot'}
+                    sx={{
+                      height: 22,
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      backgroundColor: '#e8f2fe',
+                      color: '#0d75fc',
+                    }}
+                  />
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700, color: '#0d75fc', fontFamily: 'monospace', fontSize: '0.95rem' }}>
                   {formatHours(row.hours)}
