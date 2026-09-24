@@ -10,6 +10,7 @@ export default function StatCard({ title, value, subtitle, icon: Icon, color = '
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: '100%',
+        boxSizing: 'border-box',
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5 }}>

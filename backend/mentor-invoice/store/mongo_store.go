@@ -329,15 +329,26 @@ func (s *MongoStore) GetAllActiveMentors(ctx context.Context, program string, st
 		}
 
 		records, _ := s.GetHostAttendanceForMentor(ctx, program, g.Host, start, end)
+		sessions, _ := s.GetSessionsForMentor(ctx, program, g.Host, start, end)
 		inv := core.AggregateMentorInvoice(core.AggregateInput{
 			MentorHash:        g.Host,
 			MentorName:        name,
 			Email:             email,
 			Profile:           prof,
 			AttendanceRecords: records,
+			Sessions:          sessions,
 			Batches:           batches,
 			Courses:           courses,
 		})
+
+		var sessionsTaken []string
+		seenNames := make(map[string]bool)
+		for _, item := range inv.Items {
+			if item.SessionName != "" && !seenNames[item.SessionName] {
+				seenNames[item.SessionName] = true
+				sessionsTaken = append(sessionsTaken, item.SessionName)
+			}
+		}
 
 		items = append(items, models.MentorListItem{
 			MentorHash:      g.Host,
@@ -351,6 +362,7 @@ func (s *MongoStore) GetAllActiveMentors(ctx context.Context, program string, st
 			CalculatedHours: inv.TotalHours,
 			TotalAmount:     inv.TotalAmount,
 			LatestStatus:    models.StatusDraft,
+			SessionsTaken:   sessionsTaken,
 		})
 	}
 

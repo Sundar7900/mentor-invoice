@@ -398,10 +398,11 @@ for (let i = 0; i < durations.length; i++) {
   const eTime = sTime + dur;
   const sessId = `sess-shabari-${i + 1}`;
   const attId = `att-shabari-${i + 1}`;
+  const sessName = `Week ${Math.floor(i / 2) + 1} / Psuedo Mainboot Day ${(i % 2) + 1}`;
 
   sessionDocs.push({
     id: sessId,
-    sessionName: `Session ${i + 1}: Data Science Practical`,
+    sessionName: sessName,
     courseId: "c89ec418-c685-43dc-88c0-e807edb03d41",
     courseKey: "zen_data_science",
     program: program,
@@ -411,7 +412,7 @@ for (let i = 0; i < durations.length; i++) {
     mentorName: "Mr. Shabarinath P",
     startTime: sTime,
     endTime: eTime,
-    sessionType: "Live Class",
+    sessionType: "wpn",
     completed: true,
     created: { at: sTime, by: "system" },
     deleted: false
@@ -424,6 +425,8 @@ for (let i = 0; i < durations.length; i++) {
     hostEmail: "shabarinath.p@guvi.in",
     batchId: "6c78282c-91cd-4353-9e5b-2f74b06dd8d8",
     sessionId: sessId,
+    sessionName: sessName,
+    sessionType: "wpn",
     sessionDate: sTime,
     sessionStartTime: sTime,
     sessionEndTime: eTime,
@@ -472,7 +475,7 @@ const apr4_530pm = 1775304000; // 2026-04-04 17:30:00 IST
 // 1) Gopi Krishnan - Devops - 1.9 hrs (7012s)
 sessionDocs.push({
   id: "sess-gopi-1",
-  sessionName: "How Modern Applications Work",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: How Modern Applications Work",
   courseId: "c-devops-001",
   courseKey: "devops_eng",
   program: program,
@@ -482,7 +485,7 @@ sessionDocs.push({
   mentorName: "Gopi Krishnan",
   startTime: apr4_10am,
   endTime: apr4_12pm,
-  sessionType: "Live Class",
+  sessionType: "wpn",
   completed: true,
   created: { at: apr4_10am, by: "system" },
   deleted: false
@@ -494,6 +497,8 @@ attendanceDocs.push({
   hostEmail: "gopi.krishnan@guvi.in",
   batchId: "b-devops-b40",
   sessionId: "sess-gopi-1",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: How Modern Applications Work",
+  sessionType: "wpn",
   sessionDate: apr4_10am,
   sessionStartTime: apr4_10am,
   sessionEndTime: apr4_12pm,
@@ -513,7 +518,7 @@ attendanceDocs.push({
 // 2) Sashikiran - UIUX - Cancelled (0 hrs)
 sessionDocs.push({
   id: "sess-sashi-1",
-  sessionName: "Session Cancelled",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: Session Cancelled",
   courseId: "c-uiux-002",
   courseKey: "uiux_design",
   program: program,
@@ -523,7 +528,7 @@ sessionDocs.push({
   mentorName: "Sashikiran",
   startTime: apr4_10am,
   endTime: apr4_12pm,
-  sessionType: "Cancelled",
+  sessionType: "wpn",
   completed: false,
   created: { at: apr4_10am, by: "system" },
   deleted: false
@@ -535,6 +540,8 @@ attendanceDocs.push({
   hostEmail: "sashikiran@guvi.in",
   batchId: "b-uiux-b50",
   sessionId: "sess-sashi-1",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: Session Cancelled",
+  sessionType: "wpn",
   sessionDate: apr4_10am,
   sessionStartTime: apr4_10am,
   sessionEndTime: apr4_12pm,
@@ -554,7 +561,7 @@ attendanceDocs.push({
 // 3) Mrudula Chaudhari - PAT - 2.2 hrs (8045s)
 sessionDocs.push({
   id: "sess-mrudula-1",
-  sessionName: "Inside an IT Project: Where Testers Fit",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: Inside an IT Project: Where Testers Fit",
   courseId: "c-pat-003",
   courseKey: "pat_training",
   program: program,
@@ -564,7 +571,7 @@ sessionDocs.push({
   mentorName: "Mrudula Chaudhari",
   startTime: apr4_10am,
   endTime: apr4_12pm,
-  sessionType: "Live Class",
+  sessionType: "wpn",
   completed: true,
   created: { at: apr4_10am, by: "system" },
   deleted: false
@@ -576,6 +583,8 @@ attendanceDocs.push({
   hostEmail: "mrudula.c@guvi.in",
   batchId: "b-pat-b24",
   sessionId: "sess-mrudula-1",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: Inside an IT Project: Where Testers Fit",
+  sessionType: "wpn",
   sessionDate: apr4_10am,
   sessionStartTime: apr4_10am,
   sessionEndTime: apr4_12pm,
@@ -595,7 +604,7 @@ attendanceDocs.push({
 // 4) Shanmuganathan S - DM - 1.2 hrs (4368s)
 sessionDocs.push({
   id: "sess-shanmuga-1",
-  sessionName: "Marketing vs Selling",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: Marketing vs Selling",
   courseId: "c-dm-004",
   courseKey: "digital_marketing",
   program: program,
@@ -605,7 +614,7 @@ sessionDocs.push({
   mentorName: "Shanmuganathan S",
   startTime: apr4_10am,
   endTime: apr4_12pm,
-  sessionType: "Live Class",
+  sessionType: "wpn",
   completed: true,
   created: { at: apr4_10am, by: "system" },
   deleted: false
@@ -617,6 +626,8 @@ attendanceDocs.push({
   hostEmail: "shanmuganathan.s@guvi.in",
   batchId: "b-dm-b32",
   sessionId: "sess-shanmuga-1",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: Marketing vs Selling",
+  sessionType: "wpn",
   sessionDate: apr4_10am,
   sessionStartTime: apr4_10am,
   sessionEndTime: apr4_12pm,
@@ -636,7 +647,7 @@ attendanceDocs.push({
 // 5) Shyam Kumar - Business Analyst - 2.0 hrs (7364s), Rate ₹3,500, Total ₹7,000
 sessionDocs.push({
   id: "sess-shyam-1",
-  sessionName: "Business Analytics Basics.",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: Business Analyst & AI Fundamentals",
   courseId: "c-bmai-005",
   courseKey: "business_analytics",
   program: program,
@@ -646,7 +657,7 @@ sessionDocs.push({
   mentorName: "Shyam Kumar",
   startTime: apr4_3pm,
   endTime: apr4_530pm,
-  sessionType: "Live Class",
+  sessionType: "wpn",
   completed: true,
   created: { at: apr4_3pm, by: "system" },
   deleted: false
@@ -658,6 +669,8 @@ attendanceDocs.push({
   hostEmail: "shyam.kumar@guvi.in",
   batchId: "b-bmai-b63",
   sessionId: "sess-shyam-1",
+  sessionName: "Week 1 / Psuedo Mainboot Day 1: Business Analyst & AI Fundamentals",
+  sessionType: "wpn",
   sessionDate: apr4_3pm,
   sessionStartTime: apr4_3pm,
   sessionEndTime: apr4_530pm,
@@ -669,6 +682,49 @@ attendanceDocs.push({
   meetingDuration: 150,
   attendanceInfo: [
     { joined_at: apr4_3pm + 24, left_at: apr4_3pm + 7388, peer_duration: 7364 }
+  ],
+  created: { at: apr4_3pm, by: "system" },
+  deleted: false
+});
+
+// 6) Ignored session with BLANK sessionType: "" to test that blank session types are ignored
+sessionDocs.push({
+  id: "sess-ignored-blank",
+  sessionName: "Uncategorized Session",
+  courseId: "c-devops-001",
+  courseKey: "devops_eng",
+  program: program,
+  batchId: "b-devops-b40",
+  sessionOrder: 2,
+  mentor: gopiHash,
+  mentorName: "Gopi Krishnan",
+  startTime: apr4_3pm,
+  endTime: apr4_530pm,
+  sessionType: "",
+  completed: true,
+  created: { at: apr4_3pm, by: "system" },
+  deleted: false
+});
+attendanceDocs.push({
+  id: "att-ignored-blank",
+  host: gopiHash,
+  hostName: "Gopi Krishnan",
+  hostEmail: "gopi.krishnan@guvi.in",
+  batchId: "b-devops-b40",
+  sessionId: "sess-ignored-blank",
+  sessionName: "Uncategorized Session",
+  sessionType: "",
+  sessionDate: apr4_3pm,
+  sessionStartTime: apr4_3pm,
+  sessionEndTime: apr4_530pm,
+  role: "host",
+  status: "attended",
+  isPresent: true,
+  attendancePercentage: 100,
+  totalMinutesAttended: 120,
+  meetingDuration: 120,
+  attendanceInfo: [
+    { joined_at: apr4_3pm, left_at: apr4_530pm, peer_duration: 7200 }
   ],
   created: { at: apr4_3pm, by: "system" },
   deleted: false

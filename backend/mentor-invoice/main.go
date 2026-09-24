@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +18,38 @@ import (
 	"mentor-invoice/worker"
 )
 
+func loadEnvFile(paths ...string) {
+	for _, path := range paths {
+		file, err := os.Open(path)
+		if err != nil {
+			continue
+		}
+		defer file.Close()
+
+		log.Printf("[mentor-invoice] Loaded environment from %s", path)
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			line := strings.TrimSpace(scanner.Text())
+			if line == "" || strings.HasPrefix(line, "#") {
+				continue
+			}
+			parts := strings.SplitN(line, "=", 2)
+			if len(parts) == 2 {
+				key := strings.TrimSpace(parts[0])
+				val := strings.TrimSpace(parts[1])
+				val = strings.Trim(val, `"'`)
+				if os.Getenv(key) == "" {
+					os.Setenv(key, val)
+				}
+			}
+		}
+		break
+	}
+}
+
 func main() {
+	loadEnvFile(".env", "backend/mentor-invoice/.env")
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

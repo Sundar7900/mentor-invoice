@@ -6,7 +6,6 @@ import {
   Typography,
   Box,
   Button,
-  Chip,
   Avatar,
   CircularProgress,
   Container,
@@ -16,13 +15,14 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 import routes from './mentor-invoice/routes';
 import navItems from './mentor-invoice/navItems';
+import guviLogo from './assets/guvi-logo.svg';
 
 export default function App() {
   const location = useLocation();
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#F8FAFC' }}>
-      {/* Zen Portal Navigation Header */}
+      {/* Zen Portal Navigation Top Header */}
       <AppBar
         position="sticky"
         elevation={0}
@@ -34,60 +34,66 @@ export default function App() {
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ minHeight: '64px', display: 'flex', justifyContent: 'space-between' }}>
-            {/* Logo and Brand */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Box
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '8px',
-                    backgroundColor: '#0d75fc',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '1.1rem',
-                  }}
-                >
-                  Z
-                </Box>
-                <Typography variant="h6" sx={{ fontWeight: 800, color: '#1F252D', letterSpacing: -0.5 }}>
-                  Zen <span style={{ color: '#0d75fc' }}>Portal</span>
-                </Typography>
-              </Box>
-
-              <Chip
-                label="TENANT: ZEN"
-                size="small"
+            {/* Left: Logo and Brand */}
+            <Box
+              component={Link}
+              to="/mentor-invoice"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                textDecoration: 'none',
+                color: 'inherit',
+              }}
+            >
+              <Box
+                component="img"
+                src={guviLogo}
+                alt="GUVI Logo"
                 sx={{
-                  backgroundColor: '#e8f2fe',
-                  color: '#0d75fc',
-                  fontWeight: 700,
-                  fontSize: '0.7rem',
-                  letterSpacing: 0.5,
+                  height: 30,
+                  width: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
                 }}
               />
+              <Box sx={{ height: 20, width: '1px', backgroundColor: '#CBD5E1', mx: 0.5 }} />
+              <Typography variant="h6" sx={{ fontWeight: 800, color: '#1F252D', letterSpacing: -0.5 }}>
+                Zen <span style={{ color: '#0d75fc' }}>Portal</span>
+              </Typography>
+            </Box>
 
+            {/* Right: Navigation Items and User Profile */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
               {/* Navigation Items exported from feature navItems.js */}
-              <Box sx={{ display: 'flex', gap: 1, ml: 2 }}>
+              <Box sx={{ display: 'flex', gap: 1 }}>
                 {navItems.map((item) => {
-                  const isActive = location.pathname === item.route;
+                  const isActive =
+                    location.pathname === item.route ||
+                    (item.route === '/mentor-invoice' &&
+                      (location.pathname === '/mentor-invoice' || location.pathname.startsWith('/mentor-invoice/sheet')));
+
                   return (
                     <Button
                       key={item.key}
                       component={Link}
                       to={item.route}
-                      startIcon={item.image === 'receipt_long' ? <ReceiptLongIcon /> : <AccountBalanceIcon />}
+                      startIcon={
+                        item.image === 'receipt_long' ? (
+                          <ReceiptLongIcon sx={{ fontSize: 20 }} />
+                        ) : (
+                          <AccountBalanceIcon sx={{ fontSize: 20 }} />
+                        )
+                      }
                       sx={{
                         textTransform: 'none',
                         fontWeight: 600,
-                        fontSize: '0.9rem',
+                        fontSize: '0.875rem',
                         color: isActive ? '#0d75fc' : '#495565',
                         backgroundColor: isActive ? '#e8f2fe' : 'transparent',
                         borderRadius: '8px',
                         px: 2,
+                        py: 0.75,
                         '&:hover': {
                           backgroundColor: isActive ? '#e8f2fe' : '#f1f5f9',
                         },
@@ -98,28 +104,39 @@ export default function App() {
                   );
                 })}
               </Box>
-            </Box>
 
-            {/* User Profile */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Box sx={{ textAlign: 'right', display: { xs: 'none', sm: 'block' } }}>
-                <Typography variant="body2" sx={{ fontWeight: 700, color: '#1F252D', lineHeight: 1.2 }}>
-                  Operations Admin
-                </Typography>
-                <Typography variant="caption" sx={{ color: '#5E7087' }}>
-                  Billing & Attendance Coordinator
-                </Typography>
+              {/* Vertical Divider */}
+              <Box sx={{ height: 24, width: '1px', backgroundColor: '#E2E8F0', display: { xs: 'none', sm: 'block' } }} />
+
+              {/* User Profile */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                <Box sx={{ textAlign: 'right', display: { xs: 'none', sm: 'block' } }}>
+                  <Typography variant="body2" sx={{ fontWeight: 700, color: '#1F252D', lineHeight: 1.2 }}>
+                    Operations Admin
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: '#5E7087' }}>
+                    Billing & Attendance Coordinator
+                  </Typography>
+                </Box>
+                <Avatar
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    backgroundColor: '#0d75fc',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                  }}
+                >
+                  OA
+                </Avatar>
               </Box>
-              <Avatar sx={{ width: 36, height: 36, backgroundColor: '#0d75fc', fontWeight: 700, fontSize: '0.9rem' }}>
-                OA
-              </Avatar>
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
 
       {/* Main Content Area */}
-      <Box sx={{ flex: 1, py: 3 }}>
+      <Box sx={{ flex: 1, pb: 4 }}>
         <Suspense
           fallback={
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>

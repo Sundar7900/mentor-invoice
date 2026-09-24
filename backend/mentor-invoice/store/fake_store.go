@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"errors"
+	"fmt"
 	"sync"
 	"time"
 
@@ -133,10 +134,11 @@ func NewFakeStore() *FakeStore {
 		sessTime := baseTime + int64(i*86400)
 		sessID := "sess-" + string(rune(i+'A'))
 		attID := "att-" + string(rune(i+'A'))
+		sessName := fmt.Sprintf("Week %d / Pseudo Mainboot Day %d", (i/2)+1, (i%2)+1)
 
 		fs.Sessions = append(fs.Sessions, models.Session{
 			ID:          sessID,
-			SessionName: "Class Session",
+			SessionName: sessName,
 			CourseID:    "c89ec418-c685-43dc-88c0-e807edb03d41",
 			BatchID:     b1.ID,
 			Program:     prog,
@@ -144,7 +146,7 @@ func NewFakeStore() *FakeStore {
 			MentorName:  "Mr. Shabarinath P",
 			StartTime:   sessTime,
 			EndTime:     sessTime + int64(dur),
-			SessionType: "Live Class",
+			SessionType: "wpn",
 			Completed:   true,
 			Deleted:     false,
 		})
@@ -156,6 +158,8 @@ func NewFakeStore() *FakeStore {
 			HostEmail:        "shabarinath.p@guvi.in",
 			BatchID:          b1.ID,
 			SessionID:        sessID,
+			SessionName:      sessName,
+			SessionType:      "wpn",
 			SessionDate:      sessTime,
 			SessionStartTime: sessTime,
 			SessionEndTime:   sessTime + int64(dur),
@@ -201,31 +205,31 @@ func NewFakeStore() *FakeStore {
 		ID: "prof-gopi-4", Program: prog, MentorHash: gopiHash, MentorName: "Gopi Krishnan",
 		Email: "gopi.krishnan@guvi.in", CourseName: "Devops Engineering Masterclass", HourlyRate: 2500, Currency: "INR",
 		BankDetails: models.BankDetails{AccountNumber: "23456789012345", IFSC: "HDFC0002345", BankName: "HDFC Bank", PANNumber: "GPKPN1234K"},
-		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+		Created:     models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
 	}
 	fs.Profiles[prog+":"+sashiHash] = models.MentorProfile{
 		ID: "prof-sashi-5", Program: prog, MentorHash: sashiHash, MentorName: "Sashikiran",
 		Email: "sashikiran@guvi.in", CourseName: "UIUX Design Specialization", HourlyRate: 2000, Currency: "INR",
 		BankDetails: models.BankDetails{AccountNumber: "34567890123456", IFSC: "SBIN0003456", BankName: "State Bank of India", PANNumber: "SSKPN5678L"},
-		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+		Created:     models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
 	}
 	fs.Profiles[prog+":"+mrudulaHash] = models.MentorProfile{
 		ID: "prof-mrudula-6", Program: prog, MentorHash: mrudulaHash, MentorName: "Mrudula Chaudhari",
 		Email: "mrudula.c@guvi.in", CourseName: "PAT - Placement & Aptitude Training", HourlyRate: 2800, Currency: "INR",
 		BankDetails: models.BankDetails{AccountNumber: "45678901234567", IFSC: "UTIB0004567", BankName: "Axis Bank", PANNumber: "MCDPN9012M"},
-		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+		Created:     models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
 	}
 	fs.Profiles[prog+":"+shanmugaHash] = models.MentorProfile{
 		ID: "prof-shanmuga-7", Program: prog, MentorHash: shanmugaHash, MentorName: "Shanmuganathan S",
 		Email: "shanmuganathan.s@guvi.in", CourseName: "Digital Marketing Specialist", HourlyRate: 2200, Currency: "INR",
 		BankDetails: models.BankDetails{AccountNumber: "56789012345678", IFSC: "CNRB0005678", BankName: "Canara Bank", PANNumber: "SMGPN3456N"},
-		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+		Created:     models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
 	}
 	fs.Profiles[prog+":"+shyamHash] = models.MentorProfile{
 		ID: "prof-shyam-8", Program: prog, MentorHash: shyamHash, MentorName: "Shyam Kumar",
 		Email: "shyam.kumar@guvi.in", CourseName: "Business Analyst & AI", HourlyRate: 3500, Currency: "INR",
 		BankDetails: models.BankDetails{AccountNumber: "67890123456789", IFSC: "KKBK0006789", BankName: "Kotak Mahindra Bank", PANNumber: "SYMPN7890P"},
-		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+		Created:     models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
 	}
 
 	// Batches
@@ -249,67 +253,86 @@ func NewFakeStore() *FakeStore {
 
 	// Gopi
 	fs.Sessions = append(fs.Sessions, models.Session{
-		ID: "sess-gopi-1", SessionName: "How Modern Applications Work", CourseID: "c-devops-001", CourseKey: "devops_eng",
+		ID: "sess-gopi-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: How Modern Applications Work", CourseID: "c-devops-001", CourseKey: "devops_eng",
 		BatchID: "b-devops-b40", Program: prog, Mentor: gopiHash, MentorName: "Gopi Krishnan",
-		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "Live Class", Completed: true,
+		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "wpn", Completed: true,
 	})
 	fs.Attendance = append(fs.Attendance, models.HostAttendance{
 		ID: "att-gopi-1", Host: gopiHash, HostName: "Gopi Krishnan", HostEmail: "gopi.krishnan@guvi.in",
-		BatchID: "b-devops-b40", SessionID: "sess-gopi-1", SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
+		BatchID: "b-devops-b40", SessionID: "sess-gopi-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: How Modern Applications Work", SessionType: "wpn",
+		SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
 		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: apr4_10am + 132, LeftAt: apr4_10am + 7144, PeerDuration: 7012}},
-		IsPresent: true, Status: "attended", AttendancePercentage: 97,
+		IsPresent:      true, Status: "attended", AttendancePercentage: 97,
 	})
 
 	// Sashikiran
 	fs.Sessions = append(fs.Sessions, models.Session{
-		ID: "sess-sashi-1", SessionName: "Session Cancelled", CourseID: "c-uiux-002", CourseKey: "uiux_design",
+		ID: "sess-sashi-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: Session Cancelled", CourseID: "c-uiux-002", CourseKey: "uiux_design",
 		BatchID: "b-uiux-b50", Program: prog, Mentor: sashiHash, MentorName: "Sashikiran",
-		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "Cancelled", Completed: false,
+		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "wpn", Completed: false,
 	})
 	fs.Attendance = append(fs.Attendance, models.HostAttendance{
 		ID: "att-sashi-1", Host: sashiHash, HostName: "Sashikiran", HostEmail: "sashikiran@guvi.in",
-		BatchID: "b-uiux-b50", SessionID: "sess-sashi-1", SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
+		BatchID: "b-uiux-b50", SessionID: "sess-sashi-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: Session Cancelled", SessionType: "wpn",
+		SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
 		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: 0, LeftAt: 0, PeerDuration: 0}},
-		IsPresent: false, Status: "cancelled", AttendancePercentage: 0,
+		IsPresent:      false, Status: "cancelled", AttendancePercentage: 0,
 	})
 
 	// Mrudula
 	fs.Sessions = append(fs.Sessions, models.Session{
-		ID: "sess-mrudula-1", SessionName: "Inside an IT Project: Where Testers Fit", CourseID: "c-pat-003", CourseKey: "pat_training",
+		ID: "sess-mrudula-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: Inside an IT Project: Where Testers Fit", CourseID: "c-pat-003", CourseKey: "pat_training",
 		BatchID: "b-pat-b24", Program: prog, Mentor: mrudulaHash, MentorName: "Mrudula Chaudhari",
-		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "Live Class", Completed: true,
+		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "wpn", Completed: true,
 	})
 	fs.Attendance = append(fs.Attendance, models.HostAttendance{
 		ID: "att-mrudula-1", Host: mrudulaHash, HostName: "Mrudula Chaudhari", HostEmail: "mrudula.c@guvi.in",
-		BatchID: "b-pat-b24", SessionID: "sess-mrudula-1", SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
+		BatchID: "b-pat-b24", SessionID: "sess-mrudula-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: Inside an IT Project: Where Testers Fit", SessionType: "wpn",
+		SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
 		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: apr4_10am - 32, LeftAt: apr4_10am + 8013, PeerDuration: 8045}},
-		IsPresent: true, Status: "attended", AttendancePercentage: 99,
+		IsPresent:      true, Status: "attended", AttendancePercentage: 99,
 	})
 
 	// Shanmuganathan
 	fs.Sessions = append(fs.Sessions, models.Session{
-		ID: "sess-shanmuga-1", SessionName: "Marketing vs Selling", CourseID: "c-dm-004", CourseKey: "digital_marketing",
+		ID: "sess-shanmuga-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: Marketing vs Selling", CourseID: "c-dm-004", CourseKey: "digital_marketing",
 		BatchID: "b-dm-b32", Program: prog, Mentor: shanmugaHash, MentorName: "Shanmuganathan S",
-		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "Live Class", Completed: true,
+		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "wpn", Completed: true,
 	})
 	fs.Attendance = append(fs.Attendance, models.HostAttendance{
 		ID: "att-shanmuga-1", Host: shanmugaHash, HostName: "Shanmuganathan S", HostEmail: "shanmuganathan.s@guvi.in",
-		BatchID: "b-dm-b32", SessionID: "sess-shanmuga-1", SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
+		BatchID: "b-dm-b32", SessionID: "sess-shanmuga-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: Marketing vs Selling", SessionType: "wpn",
+		SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
 		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: apr4_10am - 512, LeftAt: apr4_10am + 3856, PeerDuration: 4368}},
-		IsPresent: true, Status: "attended", AttendancePercentage: 60,
+		IsPresent:      true, Status: "attended", AttendancePercentage: 60,
 	})
 
 	// Shyam Kumar
 	fs.Sessions = append(fs.Sessions, models.Session{
-		ID: "sess-shyam-1", SessionName: "Business Analytics Basics.", CourseID: "c-bmai-005", CourseKey: "business_analytics",
+		ID: "sess-shyam-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: Business Analyst & AI Fundamentals", CourseID: "c-bmai-005", CourseKey: "business_analytics",
 		BatchID: "b-bmai-b63", Program: prog, Mentor: shyamHash, MentorName: "Shyam Kumar",
-		StartTime: apr4_3pm, EndTime: apr4_530pm, SessionType: "Live Class", Completed: true,
+		StartTime: apr4_3pm, EndTime: apr4_530pm, SessionType: "wpn", Completed: true,
 	})
 	fs.Attendance = append(fs.Attendance, models.HostAttendance{
 		ID: "att-shyam-1", Host: shyamHash, HostName: "Shyam Kumar", HostEmail: "shyam.kumar@guvi.in",
-		BatchID: "b-bmai-b63", SessionID: "sess-shyam-1", SessionDate: apr4_3pm, SessionStartTime: apr4_3pm, SessionEndTime: apr4_530pm,
+		BatchID: "b-bmai-b63", SessionID: "sess-shyam-1", SessionName: "Week 1 / Psuedo Mainboot Day 1: Business Analyst & AI Fundamentals", SessionType: "wpn",
+		SessionDate: apr4_3pm, SessionStartTime: apr4_3pm, SessionEndTime: apr4_530pm,
 		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: apr4_3pm + 24, LeftAt: apr4_3pm + 7388, PeerDuration: 7364}},
-		IsPresent: true, Status: "attended", AttendancePercentage: 98,
+		IsPresent:      true, Status: "attended", AttendancePercentage: 98,
+	})
+
+	// Add an unassigned session with BLANK SessionType: "" to test that blank session types are ignored
+	fs.Sessions = append(fs.Sessions, models.Session{
+		ID: "sess-ignored-blank", SessionName: "Uncategorized Session", CourseID: "c-devops-001", CourseKey: "devops_eng",
+		BatchID: "b-devops-b40", Program: prog, Mentor: gopiHash, MentorName: "Gopi Krishnan",
+		StartTime: apr4_3pm, EndTime: apr4_530pm, SessionType: "", Completed: true,
+	})
+	fs.Attendance = append(fs.Attendance, models.HostAttendance{
+		ID: "att-ignored-blank", Host: gopiHash, HostName: "Gopi Krishnan", HostEmail: "gopi.krishnan@guvi.in",
+		BatchID: "b-devops-b40", SessionID: "sess-ignored-blank", SessionName: "Uncategorized Session", SessionType: "",
+		SessionDate: apr4_3pm, SessionStartTime: apr4_3pm, SessionEndTime: apr4_530pm,
+		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: apr4_3pm, LeftAt: apr4_530pm, PeerDuration: 7200}},
+		IsPresent:      true, Status: "attended", AttendancePercentage: 100,
 	})
 
 	return fs
@@ -481,6 +504,7 @@ func (fs *FakeStore) GetAllActiveMentors(ctx context.Context, program string, st
 
 		// Calculate quick stats
 		records, _ := fs.GetHostAttendanceForMentor(ctx, program, hostHash, start, end)
+		sessions, _ := fs.GetSessionsForMentor(ctx, program, hostHash, start, end)
 		batches, _ := fs.GetBatchesMap(ctx, program)
 		courses, _ := fs.GetCoursesMap(ctx, program)
 		inv := core.AggregateMentorInvoice(core.AggregateInput{
@@ -489,9 +513,19 @@ func (fs *FakeStore) GetAllActiveMentors(ctx context.Context, program string, st
 			Email:             email,
 			Profile:           prof,
 			AttendanceRecords: records,
+			Sessions:          sessions,
 			Batches:           batches,
 			Courses:           courses,
 		})
+
+		var sessionsTaken []string
+		seenNames := make(map[string]bool)
+		for _, item := range inv.Items {
+			if item.SessionName != "" && !seenNames[item.SessionName] {
+				seenNames[item.SessionName] = true
+				sessionsTaken = append(sessionsTaken, item.SessionName)
+			}
+		}
 
 		items = append(items, models.MentorListItem{
 			MentorHash:      hostHash,
@@ -505,6 +539,7 @@ func (fs *FakeStore) GetAllActiveMentors(ctx context.Context, program string, st
 			CalculatedHours: inv.TotalHours,
 			TotalAmount:     inv.TotalAmount,
 			LatestStatus:    models.StatusDraft,
+			SessionsTaken:   sessionsTaken,
 		})
 	}
 

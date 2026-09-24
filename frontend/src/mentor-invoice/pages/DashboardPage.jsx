@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
-  Grid,
   Paper,
   Table,
   TableBody,
@@ -172,46 +171,48 @@ export default function DashboardPage() {
         </Alert>
       )}
 
-      {/* KPI Cards Section with explicit container to prevent MUI Grid margin collapse */}
-      <Box sx={{ mb: 4.5 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title="Total Payout Amount"
-              value={formatCurrency(summary?.totalInvoicedAmount || 0)}
-              subtitle="Calculated for billing period"
-              icon={CurrencyRupeeIcon}
-              color="#059669"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title="Total Hours Billed"
-              value={`${formatHours(summary?.totalHoursBilled || 0)} hrs`}
-              subtitle="Across all combined classes"
-              icon={AccessTimeIcon}
-              color="#0d75fc"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title="Total Sessions"
-              value={summary?.totalSessionsCount || 0}
-              subtitle="Conducted live classes"
-              icon={EventNoteIcon}
-              color="#8B5CF6"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title="Active Mentors"
-              value={summary?.activeMentorsCount || 0}
-              subtitle="Assigned to batches"
-              icon={PeopleIcon}
-              color="#F59E0B"
-            />
-          </Grid>
-        </Grid>
+      {/* KPI Cards Section with CSS Grid (eliminates MUI Grid negative margin overlap) */}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(4, 1fr)',
+          },
+          gap: 3,
+          mb: 4.5,
+          width: '100%',
+        }}
+      >
+        <StatCard
+          title="Total Payout Amount"
+          value={formatCurrency(summary?.totalInvoicedAmount || 0)}
+          subtitle="Calculated for billing period"
+          icon={CurrencyRupeeIcon}
+          color="#059669"
+        />
+        <StatCard
+          title="Total Hours Billed"
+          value={`${formatHours(summary?.totalHoursBilled || 0)} hrs`}
+          subtitle="Across all combined classes"
+          icon={AccessTimeIcon}
+          color="#0d75fc"
+        />
+        <StatCard
+          title="Total Sessions"
+          value={summary?.totalSessionsCount || 0}
+          subtitle="Conducted live classes"
+          icon={EventNoteIcon}
+          color="#8B5CF6"
+        />
+        <StatCard
+          title="Active Mentors"
+          value={summary?.activeMentorsCount || 0}
+          subtitle="Assigned to batches"
+          icon={PeopleIcon}
+          color="#F59E0B"
+        />
       </Box>
 
       {/* Main Mentor Hub Section */}
@@ -222,6 +223,7 @@ export default function DashboardPage() {
           borderRadius: '12px',
           overflow: 'hidden',
           boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+          mt: 0,
         }}
       >
         <Box
@@ -292,7 +294,29 @@ export default function DashboardPage() {
                     </TableCell>
 
                     <TableCell sx={{ color: 'var(--zen-text-secondary)', fontSize: '0.85rem' }}>
-                      {m.courseName || 'Zen Data Science'}
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: 'var(--zen-text-main)' }}>
+                        {m.courseName || 'Zen Data Science'}
+                      </Typography>
+                      {m.sessionsTaken && m.sessionsTaken.length > 0 && (
+                        <Box sx={{ mt: 0.5 }}>
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              display: 'inline-block',
+                              color: '#0d75fc',
+                              fontWeight: 600,
+                              bgcolor: '#e8f2fe',
+                              px: 0.75,
+                              py: 0.2,
+                              borderRadius: '4px',
+                              fontSize: '0.73rem',
+                            }}
+                          >
+                            {m.sessionsTaken[0]}
+                            {m.sessionsTaken.length > 1 && ` (+${m.sessionsTaken.length - 1} more)`}
+                          </Typography>
+                        </Box>
+                      )}
                     </TableCell>
 
                     <TableCell align="right" sx={{ fontWeight: 600 }}>

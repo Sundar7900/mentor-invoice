@@ -7,7 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { formatCurrency, formatHours } from '../utils/formatters';
 import { exportInvoiceToCSV } from '../utils/exportHelpers';
 
-export default function MentorSummaryCard({ invoice, onSave, onStatusChange, isSaving }) {
+export default function MentorSummaryCard({ invoice, onSave, onStatusChange, isSaving, showFinalize = false }) {
   if (!invoice) return null;
 
   const handleExport = () => {
@@ -69,7 +69,8 @@ export default function MentorSummaryCard({ invoice, onSave, onStatusChange, isS
             Export for Accounts Team
           </Button>
 
-          {onSave && (
+          {/* Finalize Invoice button hidden for now; can be enabled later via showFinalize={true} */}
+          {showFinalize && onSave && (
             <Button
               variant="contained"
               size="small"
