@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Box, Typography, Button, CircularProgress, Alert } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -10,6 +10,7 @@ import { fetchInvoicePreview, generateInvoice } from '../apiCalls/mentorInvoiceA
 export default function InvoiceSheetView() {
   const { mentorHash } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,9 +18,9 @@ export default function InvoiceSheetView() {
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  // Default billing cycle matching the sheet
-  const start = 1786876800; // Aug 16, 2026
-  const end = 1789555200;   // Sep 15, 2026
+  // Read billing cycle from query params, or default to 0 (all sessions for this mentor)
+  const start = parseInt(searchParams.get('start') || '0', 10);
+  const end = parseInt(searchParams.get('end') || '0', 10);
 
   useEffect(() => {
     const loadInvoice = async () => {
@@ -38,7 +39,7 @@ export default function InvoiceSheetView() {
     if (mentorHash) {
       loadInvoice();
     }
-  }, [mentorHash]);
+  }, [mentorHash, start, end]);
 
   const handleFinalize = async () => {
     try {

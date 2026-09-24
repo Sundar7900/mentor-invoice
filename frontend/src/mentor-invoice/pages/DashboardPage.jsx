@@ -17,6 +17,9 @@ import {
   Alert,
   IconButton,
   Tooltip,
+  FormControl,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -26,6 +29,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import EditIcon from '@mui/icons-material/Edit';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useNavigate } from 'react-router-dom';
 
 import StatCard from '../components/StatCard';
@@ -34,6 +38,12 @@ import { fetchSummary, fetchMentors, fetchInvoicePreview } from '../apiCalls/men
 import { formatCurrency, formatHours } from '../utils/formatters';
 import { exportInvoiceToCSV } from '../utils/exportHelpers';
 
+const BILLING_CYCLES = [
+  { label: 'All Cycles (All Mentors)', start: 0, end: 0 },
+  { label: 'April 2026 (01-Apr to 30-Apr-2026)', start: 1775001600, end: 1777593600 },
+  { label: 'Aug - Sep 2026 (16-Aug to 15-Sep-2026)', start: 1786876800, end: 1789555200 },
+];
+
 export default function DashboardPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -41,20 +51,17 @@ export default function DashboardPage() {
   const [summary, setSummary] = useState(null);
   const [mentors, setMentors] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCycleIdx, setSelectedCycleIdx] = useState(0);
 
-  // Default billing cycle matching sheet (Aug 16 - Sep 15, 2026)
-  const [dateRange, setDateRange] = useState({
-    start: 1786876800, // Aug 16, 2026
-    end: 1789555200,   // Sep 15, 2026
-  });
+  const dateRange = BILLING_CYCLES[selectedCycleIdx];
 
-  const loadData = async () => {
+  const loadData = async (targetRange = dateRange) => {
     try {
       setLoading(true);
       setError(null);
       const [sumData, mentorsData] = await Promise.all([
         fetchSummary(),
-        fetchMentors(dateRange.start, dateRange.end),
+        fetchMentors(targetRange.start, targetRange.end),
       ]);
       setSummary(sumData);
       setMentors(mentorsData || []);
@@ -66,8 +73,14 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    loadData();
+    loadData(BILLING_CYCLES[0]);
   }, []);
+
+  const handleCycleChange = (e) => {
+    const newIdx = e.target.value;
+    setSelectedCycleIdx(newIdx);
+    loadData(BILLING_CYCLES[newIdx]);
+  };
 
   const handleExportMentor = async (mentor) => {
     try {
@@ -96,24 +109,45 @@ export default function DashboardPage() {
           </Typography>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
-          <Chip
-            label="Billing Cycle: 16-Aug-2026 to 15-Sep-2026"
-            sx={{
-              backgroundColor: '#e8f2fe',
-              color: '#0d75fc',
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              py: 2,
-              px: 1,
-              borderRadius: '8px',
-            }}
-          />
+        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+          <FormControl size="small" sx={{ minWidth: 260 }}>
+            <Select
+              value={selectedCycleIdx}
+              onChange={handleCycleChange}
+              displayEmpty
+              renderValue={(val) => (
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#0d75fc', fontWeight: 700 }}>
+                  <CalendarMonthIcon sx={{ fontSize: '1.1rem' }} />
+                  <span>{BILLING_CYCLES[val].label}</span>
+                </Box>
+              )}
+              sx={{
+                backgroundColor: '#e8f2fe',
+                borderRadius: '8px',
+                fontWeight: 700,
+                fontSize: '0.85rem',
+                color: '#0d75fc',
+                '.MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#bfdbfe',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#0d75fc',
+                },
+              }}
+            >
+              {BILLING_CYCLES.map((c, idx) => (
+                <MenuItem key={idx} value={idx} sx={{ fontSize: '0.85rem', fontWeight: 600 }}>
+                  {c.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <Button
             variant="outlined"
             size="medium"
             startIcon={<RefreshIcon />}
-            onClick={loadData}
+            onClick={() => loadData(BILLING_CYCLES[selectedCycleIdx])}
             sx={{
               textTransform: 'none',
               fontWeight: 600,
@@ -302,7 +336,7 @@ export default function DashboardPage() {
                         <Tooltip title="View Google Sheet Breakdown">
                           <IconButton
                             size="small"
-                            onClick={() => navigate(`/mentor-invoice/sheet/${encodeURIComponent(m.mentorHash)}`)}
+                            onClick={() => navigate(`/mentor-invoice/sheet/${encodeURIComponent(m.mentorHash)}?start=${dateRange.start}&end=${dateRange.end}`)}
                             sx={{ color: '#0d75fc' }}
                           >
                             <VisibilityIcon fontSize="small" />

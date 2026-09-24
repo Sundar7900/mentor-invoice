@@ -190,6 +190,128 @@ func NewFakeStore() *FakeStore {
 		}
 	}
 
+	// 5 New Mentors on 4 April 2026
+	gopiHash := "mentor-hash-gopi-krishnan-04"
+	sashiHash := "mentor-hash-sashikiran-05"
+	mrudulaHash := "mentor-hash-mrudula-06"
+	shanmugaHash := "mentor-hash-shanmuganathan-07"
+	shyamHash := "mentor-hash-shyam-08"
+
+	fs.Profiles[prog+":"+gopiHash] = models.MentorProfile{
+		ID: "prof-gopi-4", Program: prog, MentorHash: gopiHash, MentorName: "Gopi Krishnan",
+		Email: "gopi.krishnan@guvi.in", CourseName: "Devops Engineering Masterclass", HourlyRate: 2500, Currency: "INR",
+		BankDetails: models.BankDetails{AccountNumber: "23456789012345", IFSC: "HDFC0002345", BankName: "HDFC Bank", PANNumber: "GPKPN1234K"},
+		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+	}
+	fs.Profiles[prog+":"+sashiHash] = models.MentorProfile{
+		ID: "prof-sashi-5", Program: prog, MentorHash: sashiHash, MentorName: "Sashikiran",
+		Email: "sashikiran@guvi.in", CourseName: "UIUX Design Specialization", HourlyRate: 2000, Currency: "INR",
+		BankDetails: models.BankDetails{AccountNumber: "34567890123456", IFSC: "SBIN0003456", BankName: "State Bank of India", PANNumber: "SSKPN5678L"},
+		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+	}
+	fs.Profiles[prog+":"+mrudulaHash] = models.MentorProfile{
+		ID: "prof-mrudula-6", Program: prog, MentorHash: mrudulaHash, MentorName: "Mrudula Chaudhari",
+		Email: "mrudula.c@guvi.in", CourseName: "PAT - Placement & Aptitude Training", HourlyRate: 2800, Currency: "INR",
+		BankDetails: models.BankDetails{AccountNumber: "45678901234567", IFSC: "UTIB0004567", BankName: "Axis Bank", PANNumber: "MCDPN9012M"},
+		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+	}
+	fs.Profiles[prog+":"+shanmugaHash] = models.MentorProfile{
+		ID: "prof-shanmuga-7", Program: prog, MentorHash: shanmugaHash, MentorName: "Shanmuganathan S",
+		Email: "shanmuganathan.s@guvi.in", CourseName: "Digital Marketing Specialist", HourlyRate: 2200, Currency: "INR",
+		BankDetails: models.BankDetails{AccountNumber: "56789012345678", IFSC: "CNRB0005678", BankName: "Canara Bank", PANNumber: "SMGPN3456N"},
+		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+	}
+	fs.Profiles[prog+":"+shyamHash] = models.MentorProfile{
+		ID: "prof-shyam-8", Program: prog, MentorHash: shyamHash, MentorName: "Shyam Kumar",
+		Email: "shyam.kumar@guvi.in", CourseName: "Business Analyst & AI", HourlyRate: 3500, Currency: "INR",
+		BankDetails: models.BankDetails{AccountNumber: "67890123456789", IFSC: "KKBK0006789", BankName: "Kotak Mahindra Bank", PANNumber: "SYMPN7890P"},
+		Created: models.AuditInfo{At: time.Now().Unix(), By: "system"}, Deleted: false,
+	}
+
+	// Batches
+	fs.Batches["b-devops-b40"] = models.Batch{ID: "b-devops-b40", Name: "DO-C-WE-E-B40", CourseID: "c-devops-001", CourseKey: "devops_eng", Program: prog}
+	fs.Batches["b-uiux-b50"] = models.Batch{ID: "b-uiux-b50", Name: "UIUX-C-WE-E-B50", CourseID: "c-uiux-002", CourseKey: "uiux_design", Program: prog}
+	fs.Batches["b-pat-b24"] = models.Batch{ID: "b-pat-b24", Name: "PAT-C-WE-E-B24", CourseID: "c-pat-003", CourseKey: "pat_training", Program: prog}
+	fs.Batches["b-dm-b32"] = models.Batch{ID: "b-dm-b32", Name: "DM-C-WE-E-B32", CourseID: "c-dm-004", CourseKey: "digital_marketing", Program: prog}
+	fs.Batches["b-bmai-b63"] = models.Batch{ID: "b-bmai-b63", Name: "BMAI-C-WE-E-B63", CourseID: "c-bmai-005", CourseKey: "business_analytics", Program: prog}
+
+	// Courses
+	fs.Courses["c-devops-001"] = models.Course{ID: "c-devops-001", Name: "Devops Engineering Masterclass", CourseKey: "devops_eng", Program: prog}
+	fs.Courses["c-uiux-002"] = models.Course{ID: "c-uiux-002", Name: "UIUX Design Specialization", CourseKey: "uiux_design", Program: prog}
+	fs.Courses["c-pat-003"] = models.Course{ID: "c-pat-003", Name: "PAT - Placement & Aptitude Training", CourseKey: "pat_training", Program: prog}
+	fs.Courses["c-dm-004"] = models.Course{ID: "c-dm-004", Name: "Digital Marketing Specialist", CourseKey: "digital_marketing", Program: prog}
+	fs.Courses["c-bmai-005"] = models.Course{ID: "c-bmai-005", Name: "Business Analyst & AI", CourseKey: "business_analytics", Program: prog}
+
+	apr4_10am := int64(1775277000)
+	apr4_12pm := int64(1775284200)
+	apr4_3pm := int64(1775295000)
+	apr4_530pm := int64(1775304000)
+
+	// Gopi
+	fs.Sessions = append(fs.Sessions, models.Session{
+		ID: "sess-gopi-1", SessionName: "How Modern Applications Work", CourseID: "c-devops-001", CourseKey: "devops_eng",
+		BatchID: "b-devops-b40", Program: prog, Mentor: gopiHash, MentorName: "Gopi Krishnan",
+		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "Live Class", Completed: true,
+	})
+	fs.Attendance = append(fs.Attendance, models.HostAttendance{
+		ID: "att-gopi-1", Host: gopiHash, HostName: "Gopi Krishnan", HostEmail: "gopi.krishnan@guvi.in",
+		BatchID: "b-devops-b40", SessionID: "sess-gopi-1", SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
+		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: apr4_10am + 132, LeftAt: apr4_10am + 7144, PeerDuration: 7012}},
+		IsPresent: true, Status: "attended", AttendancePercentage: 97,
+	})
+
+	// Sashikiran
+	fs.Sessions = append(fs.Sessions, models.Session{
+		ID: "sess-sashi-1", SessionName: "Session Cancelled", CourseID: "c-uiux-002", CourseKey: "uiux_design",
+		BatchID: "b-uiux-b50", Program: prog, Mentor: sashiHash, MentorName: "Sashikiran",
+		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "Cancelled", Completed: false,
+	})
+	fs.Attendance = append(fs.Attendance, models.HostAttendance{
+		ID: "att-sashi-1", Host: sashiHash, HostName: "Sashikiran", HostEmail: "sashikiran@guvi.in",
+		BatchID: "b-uiux-b50", SessionID: "sess-sashi-1", SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
+		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: 0, LeftAt: 0, PeerDuration: 0}},
+		IsPresent: false, Status: "cancelled", AttendancePercentage: 0,
+	})
+
+	// Mrudula
+	fs.Sessions = append(fs.Sessions, models.Session{
+		ID: "sess-mrudula-1", SessionName: "Inside an IT Project: Where Testers Fit", CourseID: "c-pat-003", CourseKey: "pat_training",
+		BatchID: "b-pat-b24", Program: prog, Mentor: mrudulaHash, MentorName: "Mrudula Chaudhari",
+		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "Live Class", Completed: true,
+	})
+	fs.Attendance = append(fs.Attendance, models.HostAttendance{
+		ID: "att-mrudula-1", Host: mrudulaHash, HostName: "Mrudula Chaudhari", HostEmail: "mrudula.c@guvi.in",
+		BatchID: "b-pat-b24", SessionID: "sess-mrudula-1", SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
+		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: apr4_10am - 32, LeftAt: apr4_10am + 8013, PeerDuration: 8045}},
+		IsPresent: true, Status: "attended", AttendancePercentage: 99,
+	})
+
+	// Shanmuganathan
+	fs.Sessions = append(fs.Sessions, models.Session{
+		ID: "sess-shanmuga-1", SessionName: "Marketing vs Selling", CourseID: "c-dm-004", CourseKey: "digital_marketing",
+		BatchID: "b-dm-b32", Program: prog, Mentor: shanmugaHash, MentorName: "Shanmuganathan S",
+		StartTime: apr4_10am, EndTime: apr4_12pm, SessionType: "Live Class", Completed: true,
+	})
+	fs.Attendance = append(fs.Attendance, models.HostAttendance{
+		ID: "att-shanmuga-1", Host: shanmugaHash, HostName: "Shanmuganathan S", HostEmail: "shanmuganathan.s@guvi.in",
+		BatchID: "b-dm-b32", SessionID: "sess-shanmuga-1", SessionDate: apr4_10am, SessionStartTime: apr4_10am, SessionEndTime: apr4_12pm,
+		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: apr4_10am - 512, LeftAt: apr4_10am + 3856, PeerDuration: 4368}},
+		IsPresent: true, Status: "attended", AttendancePercentage: 60,
+	})
+
+	// Shyam Kumar
+	fs.Sessions = append(fs.Sessions, models.Session{
+		ID: "sess-shyam-1", SessionName: "Business Analytics Basics.", CourseID: "c-bmai-005", CourseKey: "business_analytics",
+		BatchID: "b-bmai-b63", Program: prog, Mentor: shyamHash, MentorName: "Shyam Kumar",
+		StartTime: apr4_3pm, EndTime: apr4_530pm, SessionType: "Live Class", Completed: true,
+	})
+	fs.Attendance = append(fs.Attendance, models.HostAttendance{
+		ID: "att-shyam-1", Host: shyamHash, HostName: "Shyam Kumar", HostEmail: "shyam.kumar@guvi.in",
+		BatchID: "b-bmai-b63", SessionID: "sess-shyam-1", SessionDate: apr4_3pm, SessionStartTime: apr4_3pm, SessionEndTime: apr4_530pm,
+		AttendanceInfo: []models.HostAttendanceInfo{{JoinedAt: apr4_3pm + 24, LeftAt: apr4_3pm + 7388, PeerDuration: 7364}},
+		IsPresent: true, Status: "attended", AttendancePercentage: 98,
+	})
+
 	return fs
 }
 
