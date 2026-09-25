@@ -33,6 +33,10 @@ yarn-error.log*
 !.env.example
 !*.env.example
 !**/.env.example
+!frontend/.env.production
+
+# Go compiled binary (from Dockerfile build)
+backend/mentor-invoice/server
 
 # OS files
 .DS_Store
