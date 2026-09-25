@@ -1,0 +1,23 @@
+# Render Blueprint — Mentor Invoice Backend
+# Place this file at the repo root.
+# It lets Render auto-detect the service when you connect your GitHub repo.
+
+services:
+  - type: web
+    name: mentor-invoice-backend
+    runtime: docker
+    dockerfilePath: backend/mentor-invoice/Dockerfile
+    plan: free
+    envVars:
+      - key: PORT
+        value: "8080"
+      - key: MONGO_URI
+        sync: false         # Fill in from Render dashboard (MongoDB Atlas connection string)
+      - key: MONGO_DB_NAME
+        value: zen_portal
+      - key: REDIS_ADDR
+        sync: false         # Fill in from Render dashboard (Redis Cloud connection string)
+      - key: TENANT_PROGRAM
+        value: zen
+      - key: GIN_MODE
+        value: release
