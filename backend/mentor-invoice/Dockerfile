@@ -3,12 +3,12 @@ FROM golang:1.22-alpine AS builder
 
 WORKDIR /app
 
-# Copy go module files and download dependencies
-COPY go.mod go.sum ./
+# Copy go module files from repo root context (Render uses repo root as build context)
+COPY backend/mentor-invoice/go.mod backend/mentor-invoice/go.sum ./
 RUN go mod download
 
-# Copy all source code
-COPY . .
+# Copy all backend source code
+COPY backend/mentor-invoice/ .
 
 # Build the binary
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server .
